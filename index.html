@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EcoHuella - Calcula tu huella de carbono y descubre cómo reducir tu impacto ambiental con consejos personalizados.">
+  <title>EcoHuella — Calculadora de Huella de Carbono</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-gradient"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navigation Dots -->
+  <nav class="nav-dots" id="nav-dots" aria-label="Navegación de pantallas">
+    <button class="dot active" data-screen="0" aria-label="Inicio"></button>
+    <button class="dot" data-screen="1" aria-label="Datos"></button>
+    <button class="dot" data-screen="2" aria-label="Resultado"></button>
+    <button class="dot" data-screen="3" aria-label="Recomendaciones"></button>
+  </nav>
+
+  <!-- ==================== SCREEN 1: INICIO ==================== -->
+  <section class="screen active" id="screen-inicio">
+    <div class="screen-content">
+      <div class="hero">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="38" stroke="url(#logoGrad)" stroke-width="2.5" opacity="0.3"/>
+              <path d="M40 12C40 12 20 28 20 44C20 55.05 28.95 64 40 64C51.05 64 60 55.05 60 44C60 28 40 12 40 12Z" fill="url(#logoGrad)" opacity="0.9"/>
+              <path d="M40 28V52M40 52L32 44M40 52L48 44" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+              <defs>
+                <linearGradient id="logoGrad" x1="20" y1="12" x2="60" y2="64">
+                  <stop stop-color="#34d399"/>
+                  <stop offset="1" stop-color="#059669"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <h1 class="logo-text">Eco<span>Huella</span></h1>
+        </div>
+
+        <p class="hero-subtitle">Descubre tu impacto ambiental y aprende a reducirlo</p>
+
+        <div class="info-cards">
+          <div class="info-card" style="--delay: 0.1s">
+            <div class="info-card-icon">🌍</div>
+            <h3>¿Qué es la huella de carbono?</h3>
+            <p>Es la cantidad total de gases de efecto invernadero que generamos con nuestras actividades diarias, medida en kg de CO₂.</p>
+          </div>
+          <div class="info-card" style="--delay: 0.2s">
+            <div class="info-card-icon">📊</div>
+            <h3>¿Por qué calcularla?</h3>
+            <p>Conocer tu huella es el primer paso para tomar decisiones más sostenibles y proteger nuestro planeta.</p>
+          </div>
+          <div class="info-card" style="--delay: 0.3s">
+            <div class="info-card-icon">🌱</div>
+            <h3>Actúa hoy</h3>
+            <p>Pequeños cambios en transporte, energía y alimentación pueden hacer una gran diferencia.</p>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btn-calcular" aria-label="Calcular mi huella de carbono">
+          <span class="btn-icon">🌿</span>
+          Calcular mi huella
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 2: INGRESO DE DATOS ==================== -->
+  <section class="screen" id="screen-datos">
+    <div class="screen-content">
+      <button class="btn-back" id="btn-back-datos" aria-label="Volver al inicio">← Volver</button>
+      <div class="form-header">
+        <h2>Ingresa tus datos</h2>
+        <p>Completa la información para calcular tu huella de carbono personal</p>
+      </div>
+
+      <form id="eco-form" class="eco-form" novalidate>
+        <!-- Transporte -->
+        <div class="form-group" style="--delay: 0.1s">
+          <div class="form-group-header">
+            <div class="form-icon transport">🚗</div>
+            <div>
+              <label for="input-km">Kilómetros en auto</label>
+              <span class="form-hint">Recorrido semanal promedio</span>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="number" id="input-km" name="km" min="0" step="1" placeholder="0" required>
+            <span class="input-unit">km/semana</span>
+          </div>
+          <div class="input-co2-preview" id="preview-km">
+            <span class="co2-label">CO₂ estimado:</span>
+            <span class="co2-value">0.00 kg</span>
+          </div>
+        </div>
+
+        <!-- Electricidad -->
+        <div class="form-group" style="--delay: 0.2s">
+          <div class="form-group-header">
+            <div class="form-icon electricity">⚡</div>
+            <div>
+              <label for="input-kwh">Consumo de electricidad</label>
+              <span class="form-hint">Consumo mensual en kWh</span>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="number" id="input-kwh" name="kwh" min="0" step="1" placeholder="0" required>
+            <span class="input-unit">kWh/mes</span>
+          </div>
+          <div class="input-co2-preview" id="preview-kwh">
+            <span class="co2-label">CO₂ estimado:</span>
+            <span class="co2-value">0.00 kg</span>
+          </div>
+        </div>
+
+        <!-- Agua -->
+        <div class="form-group" style="--delay: 0.3s">
+          <div class="form-group-header">
+            <div class="form-icon water">💧</div>
+            <div>
+              <label for="input-agua">Consumo de agua</label>
+              <span class="form-hint">Consumo mensual en metros cúbicos</span>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="number" id="input-agua" name="agua" min="0" step="0.1" placeholder="0" required>
+            <span class="input-unit">m³/mes</span>
+          </div>
+          <div class="input-co2-preview" id="preview-agua">
+            <span class="co2-label">CO₂ estimado:</span>
+            <span class="co2-value">0.00 kg</span>
+          </div>
+        </div>
+
+        <!-- Alimentación -->
+        <div class="form-group" style="--delay: 0.4s">
+          <div class="form-group-header">
+            <div class="form-icon food">🍽️</div>
+            <div>
+              <label for="input-dieta">Tipo de alimentación</label>
+              <span class="form-hint">Selecciona tu dieta habitual</span>
+            </div>
+          </div>
+          <div class="diet-options" id="diet-options">
+            <button type="button" class="diet-btn" data-diet="carnivora" data-factor="7.2">
+              <span class="diet-emoji">🥩</span>
+              <span class="diet-name">Carnívora</span>
+              <span class="diet-impact">Alto impacto</span>
+            </button>
+            <button type="button" class="diet-btn" data-diet="mixta" data-factor="5.0">
+              <span class="diet-emoji">🍲</span>
+              <span class="diet-name">Mixta</span>
+              <span class="diet-impact">Impacto medio</span>
+            </button>
+            <button type="button" class="diet-btn" data-diet="vegetariana" data-factor="3.8">
+              <span class="diet-emoji">🥗</span>
+              <span class="diet-name">Vegetariana</span>
+              <span class="diet-impact">Bajo impacto</span>
+            </button>
+            <button type="button" class="diet-btn" data-diet="vegana" data-factor="2.9">
+              <span class="diet-emoji">🌱</span>
+              <span class="diet-name">Vegana</span>
+              <span class="diet-impact">Mínimo impacto</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary btn-submit" id="btn-submit">
+          <span class="btn-icon">📊</span>
+          Ver mi resultado
+          <span class="btn-arrow">→</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 3: RESULTADO ==================== -->
+  <section class="screen" id="screen-resultado">
+    <div class="screen-content">
+      <button class="btn-back" id="btn-back-resultado" aria-label="Volver a los datos">← Volver</button>
+      <div class="result-header">
+        <h2>Tu Huella de Carbono</h2>
+        <p>Resultado basado en tus datos ingresados</p>
+      </div>
+
+      <div class="result-main">
+        <!-- Gauge Circle -->
+        <div class="gauge-container">
+          <svg class="gauge-svg" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="85" class="gauge-bg"/>
+            <circle cx="100" cy="100" r="85" class="gauge-fill" id="gauge-fill"
+                    stroke-dasharray="534" stroke-dashoffset="534"/>
+          </svg>
+          <div class="gauge-center">
+            <span class="gauge-value" id="gauge-value">0</span>
+            <span class="gauge-unit">kg CO₂</span>
+            <span class="gauge-period">/ mes</span>
+          </div>
+        </div>
+
+        <!-- Level Badge -->
+        <div class="level-badge" id="level-badge">
+          <span class="level-icon" id="level-icon">🟢</span>
+          <span class="level-text" id="level-text">Bajo</span>
+        </div>
+
+        <!-- Breakdown -->
+        <div class="breakdown">
+          <h3>Desglose de emisiones</h3>
+          <div class="breakdown-items">
+            <div class="breakdown-item">
+              <div class="breakdown-header">
+                <span class="breakdown-icon">🚗</span>
+                <span class="breakdown-label">Transporte</span>
+                <span class="breakdown-value" id="breakdown-auto">0 kg</span>
+              </div>
+              <div class="breakdown-bar">
+                <div class="breakdown-bar-fill transport" id="bar-auto" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-header">
+                <span class="breakdown-icon">⚡</span>
+                <span class="breakdown-label">Electricidad</span>
+                <span class="breakdown-value" id="breakdown-elec">0 kg</span>
+              </div>
+              <div class="breakdown-bar">
+                <div class="breakdown-bar-fill electricity" id="bar-elec" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-header">
+                <span class="breakdown-icon">💧</span>
+                <span class="breakdown-label">Agua</span>
+                <span class="breakdown-value" id="breakdown-agua">0 kg</span>
+              </div>
+              <div class="breakdown-bar">
+                <div class="breakdown-bar-fill water" id="bar-agua" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-header">
+                <span class="breakdown-icon">🍽️</span>
+                <span class="breakdown-label">Alimentación</span>
+                <span class="breakdown-value" id="breakdown-dieta">0 kg</span>
+              </div>
+              <div class="breakdown-bar">
+                <div class="breakdown-bar-fill food" id="bar-dieta" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formula Info -->
+        <div class="formula-card">
+          <h4>📐 Fórmulas utilizadas</h4>
+          <div class="formula-items">
+            <span>Auto: km × 0.21</span>
+            <span>Electricidad: kWh × 0.40</span>
+            <span>Agua: m³ × 0.30</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-recomendaciones">
+        <span class="btn-icon">💡</span>
+        Ver recomendaciones
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 4: RECOMENDACIONES ==================== -->
+  <section class="screen" id="screen-recomendaciones">
+    <div class="screen-content">
+      <button class="btn-back" id="btn-back-reco" aria-label="Volver al resultado">← Volver</button>
+      <div class="reco-header">
+        <h2>Recomendaciones</h2>
+        <p>Consejos personalizados para reducir tu huella</p>
+      </div>
+
+      <div class="reco-grid" id="reco-grid">
+        <!-- Recommendations will be injected by JS -->
+      </div>
+
+      <div class="reco-footer">
+        <div class="reco-motto">
+          <span class="motto-icon">🌍</span>
+          <p>"Cada pequeña acción cuenta para un planeta más verde."</p>
+        </div>
+        <button class="btn-primary btn-restart" id="btn-restart">
+          <span class="btn-icon">🔄</span>
+          Calcular de nuevo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
